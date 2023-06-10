@@ -1,11 +1,8 @@
-/* eslint-disable react/prop-types */
-import { useState } from "react";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
 import axios from "axios";
 
-const LoginForm = ({ closeLogSite, setUsername, setPassword, setToken }) => {
-  const [logsuc, setlogsuc] = useState(false);
+const LoginForm = ({ closeLogSite, setUsername, setPassword, setToken, messageApi }) => {
 
   const loginUser = async (username, password) => {
     const data = {
@@ -20,8 +17,10 @@ const LoginForm = ({ closeLogSite, setUsername, setPassword, setToken }) => {
       setToken(response.data.toString());
       closeLogSite(false);
     } catch (error) {
-      console.error("Błąd:", error.response.data);
-      setlogsuc(true);
+        messageApi.open({
+          type: "error",
+          content: "Podano nieprawidłowe dane logowania!",
+        }); 
     }
   };
 
@@ -30,6 +29,12 @@ const LoginForm = ({ closeLogSite, setUsername, setPassword, setToken }) => {
     console.log(values);
   };
 
+  const onFinishFailed = (errorInfo) => {
+    messageApi.open({
+      type: "error",
+      content: "Nie podano wszystkich wymaganych danych!",
+    });
+  };
   return (
     <>
       <Form
@@ -39,6 +44,7 @@ const LoginForm = ({ closeLogSite, setUsername, setPassword, setToken }) => {
           remember: true,
         }}
         onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
       >
         <Form.Item
           name="username"
@@ -80,7 +86,6 @@ const LoginForm = ({ closeLogSite, setUsername, setPassword, setToken }) => {
           </Button>
         </Form.Item>
       </Form>
-      {logsuc && <div>Błędne hasło lub mail</div>}
     </>
   );
 };

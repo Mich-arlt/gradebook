@@ -33,6 +33,7 @@ function App() {
           setUsername={setUsername}
           setPassword={setPassword}
           setToken={setToken}
+          messageApi={messageApi}
           />
           )}
         {!openLog && <GBMenu openModal={setOpenMod} />}
