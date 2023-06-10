@@ -1,15 +1,10 @@
-import React, { useState, useEffect } from "react";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
 import axios from "axios";
 
-const Logging = ({ closeLogSite, Login, Password, Token }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [token, setToken] = useState("");
-  const [logsuc, setlogsuc] = useState(false);
+const LoginForm = ({ closeLogSite, setUsername, setPassword, setToken, messageApi }) => {
 
-  const SendData = async () => {
+  const loginUser = async (username, password) => {
     const data = {
       contactEmail: username,
       password: password,
@@ -19,22 +14,27 @@ const Logging = ({ closeLogSite, Login, Password, Token }) => {
         "https://gradebook-api-app.azurewebsites.net/api/student/login",
         data
       );
-      console.log("Sukces:", response.data);
       setToken(response.data.toString());
-      console.log("token:", token);
       closeLogSite(false);
     } catch (error) {
-      console.error("Błąd:", error.response.data);
-      setlogsuc(true);
+        messageApi.open({
+          type: "error",
+          content: "Podano nieprawidłowe dane logowania!",
+        }); 
     }
   };
 
-  const onFinish = () => {
-    Login(username.toString());
-    Password(password.toString());
-    Token(token);
+  const onFinish = (values) => {
+    loginUser(values.username, values.password);
+    console.log(values);
   };
 
+  const onFinishFailed = (errorInfo) => {
+    messageApi.open({
+      type: "error",
+      content: "Nie podano wszystkich wymaganych danych!",
+    });
+  };
   return (
     <>
       <Form
@@ -44,6 +44,7 @@ const Logging = ({ closeLogSite, Login, Password, Token }) => {
           remember: true,
         }}
         onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
       >
         <Form.Item
           name="username"
@@ -57,7 +58,6 @@ const Logging = ({ closeLogSite, Login, Password, Token }) => {
           <Input
             prefix={<UserOutlined className="site-form-item-icon" />}
             placeholder="Username"
-            onChange={(e) => setUsername(e.target.value)}
           />
         </Form.Item>
         <Form.Item
@@ -73,7 +73,6 @@ const Logging = ({ closeLogSite, Login, Password, Token }) => {
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
             placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Item>
 
@@ -82,15 +81,13 @@ const Logging = ({ closeLogSite, Login, Password, Token }) => {
             type="primary"
             htmlType="submit"
             className="login-form-button"
-            onClick={SendData}
           >
             Log in
           </Button>
         </Form.Item>
       </Form>
-      {logsuc && <div>Błędne hasło lub mail</div>}
     </>
   );
 };
 
-export default Logging;
+export default LoginForm;
