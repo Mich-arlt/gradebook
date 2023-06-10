@@ -1,0 +1,54 @@
+{
+  "subjects": [
+    {
+      "name": "Analiza",
+      "grades": [
+        {
+          "dateOfIssue": "2023-05-22T21:06:01.807Z",
+          "description": "kolos",
+          "value": 3
+        }
+      ]
+    },
+    {
+      "name": "Elektronika",
+      "grades": [
+        {
+          "dateOfIssue": "2023-05-22T21:06:01.807Z",
+          "description": "praktyka",
+          "value": 4
+        }
+      ]
+    },
+    {
+      "name": "PO",
+      "grades": [
+        {
+          "dateOfIssue": "2023-05-22T21:06:01.807Z",
+          "description": "kolos",
+          "value": 5
+        }
+      ]
+    },
+    {
+      "name": "Algebra",
+      "grades": [
+        {
+          "dateOfIssue": "2023-05-22T21:06:01.807Z",
+          "description": "egzamin",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "name": "Fizyka",
+      "grades": [
+        {
+          "dateOfIssue": "2023-05-22T21:06:01.807Z",
+          "description": "stv",
+          "value": 2
+        }
+      ]
+    }
+  ]
+}

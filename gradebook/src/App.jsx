@@ -1,35 +1,40 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import SearchContextProvider from "./searchContext";
+import "./App.css";
+import "./styles.css";
+import GBMenu from "./pages/menu";
+import Logging from "./pages/LogSite";
+import { useEffect, useState } from "react";
+import GetSubjects from "./Api/GetSubjects";
+import GetGrades from "./Api/GetGrades";
+import StudentInfo from "./pages/StudentInfo/StudentInfo";
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const [openLog, setOpenLog] = useState(true);
+  const [openMod, setOpenMod] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [token, setToken] = useState("");
+  useEffect(() => {
+    console.log(token);
+  }, [token]);
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <SearchContextProvider>
+      <div className="searching">
+        {openLog && (
+          <Logging
+            closeLogSite={setOpenLog}
+            Login={setUsername}
+            Password={setPassword}
+            Token={setToken}
+          />
+        )}
+        {!openLog && <GBMenu openModal={setOpenMod} />}
+        {openMod === "searching" && <StudentInfo id={username} token={token} />}
+        {openMod === "subjects" && <GetSubjects id={username} />}
+        {openMod === "grades" && <GetGrades id={username} />}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </SearchContextProvider>
+  );
 }
 
-export default App
+export default App;
