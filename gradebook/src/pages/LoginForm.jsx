@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable react/prop-types */
+import { useState } from "react";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
 import axios from "axios";
 
-const Logging = ({ closeLogSite, Login, Password, Token }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [token, setToken] = useState("");
+const LoginForm = ({ closeLogSite, setUsername, setPassword, setToken }) => {
   const [logsuc, setlogsuc] = useState(false);
 
-  const SendData = async () => {
+  const loginUser = async (username, password) => {
     const data = {
       contactEmail: username,
       password: password,
@@ -19,9 +17,7 @@ const Logging = ({ closeLogSite, Login, Password, Token }) => {
         "https://gradebook-api-app.azurewebsites.net/api/student/login",
         data
       );
-      console.log("Sukces:", response.data);
       setToken(response.data.toString());
-      console.log("token:", token);
       closeLogSite(false);
     } catch (error) {
       console.error("Błąd:", error.response.data);
@@ -29,10 +25,9 @@ const Logging = ({ closeLogSite, Login, Password, Token }) => {
     }
   };
 
-  const onFinish = () => {
-    Login(username.toString());
-    Password(password.toString());
-    Token(token);
+  const onFinish = (values) => {
+    loginUser(values.username, values.password);
+    console.log(values);
   };
 
   return (
@@ -57,7 +52,6 @@ const Logging = ({ closeLogSite, Login, Password, Token }) => {
           <Input
             prefix={<UserOutlined className="site-form-item-icon" />}
             placeholder="Username"
-            onChange={(e) => setUsername(e.target.value)}
           />
         </Form.Item>
         <Form.Item
@@ -73,7 +67,6 @@ const Logging = ({ closeLogSite, Login, Password, Token }) => {
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
             placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Item>
 
@@ -82,7 +75,6 @@ const Logging = ({ closeLogSite, Login, Password, Token }) => {
             type="primary"
             htmlType="submit"
             className="login-form-button"
-            onClick={SendData}
           >
             Log in
           </Button>
@@ -93,4 +85,4 @@ const Logging = ({ closeLogSite, Login, Password, Token }) => {
   );
 };
 
-export default Logging;
+export default LoginForm;
