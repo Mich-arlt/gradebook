@@ -4,11 +4,11 @@ import { Menu } from "antd";
 const items = [
   {
     label: "Menu",
-    key: "mail",
     icon: <MenuUnfoldOutlined />,
+    disabled: true,
   },
   {
-    label: "Dla studenta",
+    label: "For student",
     key: "app",
     icon: <BookOutlined />,
     children: [
@@ -16,32 +16,20 @@ const items = [
         type: "group",
         children: [
           {
-            label: "Profil studenta",
+            label: "Profile",
             key: "setting:1",
           },
           {
-            label: "Twoje przedmioty",
+            label: "Your subjects",
             key: "setting:2",
           },
           {
-            label: "Twoje oceny końcowe",
+            label: "Your final grades",
             key: "setting:3",
           },
         ],
       },
     ],
-  },
-  {
-    label: (
-      <a
-        href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Link
-      </a>
-    ),
-    key: "alipay",
   },
 ];
 const GBMenu = ({ openModal }) => {

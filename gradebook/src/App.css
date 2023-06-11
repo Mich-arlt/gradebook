@@ -1,3 +1,5 @@
-body{
-    background-color: #012444;
+body {
+  background-image: url(./prints/background.svg);
+  background-size: cover;
+  background-repeat: no-repeat;
 }

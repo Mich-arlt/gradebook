@@ -2,8 +2,13 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
 import axios from "axios";
 
-const LoginForm = ({ closeLogSite, setUsername, setPassword, setToken, messageApi }) => {
-
+const LoginForm = ({
+  closeLogSite,
+  setUsername,
+  setPassword,
+  setToken,
+  messageApi,
+}) => {
   const loginUser = async (username, password) => {
     const data = {
       contactEmail: username,
@@ -14,13 +19,13 @@ const LoginForm = ({ closeLogSite, setUsername, setPassword, setToken, messageAp
         "https://gradebook-api-app.azurewebsites.net/api/student/login",
         data
       );
-      setToken(response.data.toString());
+      setToken(response.data);
       closeLogSite(false);
     } catch (error) {
-        messageApi.open({
-          type: "error",
-          content: "Podano nieprawidłowe dane logowania!",
-        }); 
+      messageApi.open({
+        type: "error",
+        content: "Podano nieprawidłowe dane logowania!",
+      });
     }
   };
 

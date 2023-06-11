@@ -1,30 +1,18 @@
 import axios from "axios";
 import "../../styles.css";
-import { Button, Descriptions, Radio } from "antd";
+import { Descriptions } from "antd";
 import { useState, useEffect } from "react";
 
-const StudentInfo = ({ id, token }) => {
+const StudentInfo = ({ id, token, nameidentifier }) => {
   const [size, setSize] = useState("default");
   const [studentData, setStudentData] = useState(null);
 
-  const onChange = (e) => {
-    console.log("size checked", e.target.value);
-    setSize(e.target.value);
-  };
-
   useEffect(() => {
     const fetchStudentData = async () => {
-      const data = {
-        headers: {
-          Key: "Authorization",
-          Value: `Bearer ${token}`,
-        },
-      };
-      console.log(data);
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       try {
         const response = await axios.get(
-          `https://gradebook-api-app.azurewebsites.net/api/student/15`,
-          data
+          `https://gradebook-api-app.azurewebsites.net/api/student/${nameidentifier}`
         );
         setStudentData(response.data);
       } catch (error) {
@@ -35,36 +23,33 @@ const StudentInfo = ({ id, token }) => {
     fetchStudentData();
   }, [id, token]);
   console.log(studentData);
-  // const { firstName, surname, contactEmail, degreeCourse, yearOfStudies } =
-  //   studentData;
 
   return (
-    <div className="StudentData">
-      {/* <Radio.Group onChange={onChange} value={size}>
-        <Radio value="default">default</Radio>
-        <Radio value="middle">middle</Radio>
-        <Radio value="small">small</Radio>
-      </Radio.Group>
-      <br />
-      <br />
-      <Descriptions bordered size={size}>
-        <Descriptions.Item label="First Name" span={3}>
-          {firstName}
-        </Descriptions.Item>
-        <Descriptions.Item label="Last Name" span={3}>
-          {surname}
-        </Descriptions.Item>
-        <Descriptions.Item label="Year of studies" span={3}>
-          {yearOfStudies}
-        </Descriptions.Item>
-        <Descriptions.Item label="Contact email" span={3}>
-          {contactEmail}
-        </Descriptions.Item>
-        <Descriptions.Item label="Degree course" span={3}>
-          {degreeCourse}
-        </Descriptions.Item>
-      </Descriptions> */}
-    </div>
+    <>
+      {studentData ? (
+        <div className="StudentData">
+          <Descriptions bordered size={"default"}>
+            <Descriptions.Item label="First Name" span={3}>
+              {studentData.firstName}
+            </Descriptions.Item>
+            <Descriptions.Item label="Last Name" span={3}>
+              {studentData.surname}
+            </Descriptions.Item>
+            <Descriptions.Item label="Year of studies" span={3}>
+              {studentData.yearOfStudies}
+            </Descriptions.Item>
+            <Descriptions.Item label="Contact email" span={3}>
+              {studentData.contactEmail}
+            </Descriptions.Item>
+            <Descriptions.Item label="Degree course" span={3}>
+              {studentData.degreeCourse}
+            </Descriptions.Item>
+          </Descriptions>
+        </div>
+      ) : (
+        <div>Loading data...</div>
+      )}
+    </>
   );
 };
 

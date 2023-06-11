@@ -1,35 +1,43 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { Descriptions } from "antd";
 
-export const GetGrades = ({ id }) => {
-  const [data, setData] = useState(null);
+export const GetGrades = ({ id, token, nameidentifier }) => {
+  const [studentData, setStudentData] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchStudentData = async () => {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       try {
         const response = await axios.get(
-          "https://gradebook-api-app.azurewebsites.net/api/finalgrade/" + id
+          `https://gradebook-api-app.azurewebsites.net/api/finalgrade/${nameidentifier}`
         );
-        setData(response.data);
+        setStudentData(response.data);
       } catch (error) {
         console.error(error);
       }
     };
 
-    fetchData();
-  }, []);
+    fetchStudentData();
+  }, [id, token]);
+
+  const generateDivs = (myObject) => {
+    return myObject.map((obj, index) => (
+      <Descriptions
+        bordered
+        size={"default"}
+        className="StudentData"
+        key={obj.name}
+      >
+        <Descriptions.Item label={obj.subjectName} span={1}>
+          <p>{obj.value}</p>
+        </Descriptions.Item>
+      </Descriptions>
+    ));
+  };
 
   return (
-    <>
-      {data ? (
-        <div>
-          <div>Data:</div>
-          <div>{JSON.stringify(data, null, 2)}</div>
-        </div>
-      ) : (
-        <div>Loading data...</div>
-      )}
-    </>
+    <>{studentData ? generateDivs(studentData) : <div>Loading data...</div>}</>
   );
 };
 
